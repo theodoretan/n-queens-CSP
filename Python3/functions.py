@@ -1,4 +1,5 @@
 from random import randint
+import time
 
 class CSP():
     """
@@ -53,25 +54,33 @@ def min_conflicts(csp, max_steps):
     """
     # current = initial complete assignment for csp
     # pass in csp as a complete inital assignment
-    past_var = None
+    past_var = []
+    start_time = time.time()
     for i in range(1, max_steps+1):
         # print(csp.domains)
         # print(csp.constraints)
         conflicted = [i for i in csp.variables if csp.constraints[i] != 0]
         if not any(conflicted):
             print(i)
+            end = (time.time() - start_time)
+            print("{}".format(end))
             return csp
         # print(get_min_conflicts(conflicted, csp))
         var = conflicted[randint(0, len(conflicted)-1)]
-        if past_var is not None:
-            while past_var == var:
-                var = conflicted[randint(0, len(conflicted)-1)]
-        else: past_var = var
+
         # var = get_min_conflicts(conflicted, csp)
-        value, csp.constraints[var] = conflicts(var, csp)
+        value= conflicts(var, csp)
+        if past_var is not []:
+            if len(past_var) >= 50: past_var.pop(0)
+            while (var, value) in past_var:
+                var = conflicted[randint(0, len(conflicted)-1)]
+                value = conflicts(var, csp)
+        else: past_var.append((var, value))
         csp.domains[var] = [int(var[1:]), value]
         update_conflicts(csp)
         #csp.constraints[var] = count
+    end = (time.time() - start_time)
+    print("{}".format(end))
     return False
 
 
@@ -90,18 +99,28 @@ def get_min_conflicts(conflicted, csp):
 
 
 def conflicts(var, csp):
-    # column = {}
+    column, asdf = {}, []
     x = int(var[1:])
     min_column = 1 if 1 != csp.domains[var][1] else 2
     min_count = get_num_conflicts([x, min_column], csp.domains)
     for y in range(1, len(csp.variables)+1):
         if y != csp.domains[var][1]:
             count = get_num_conflicts([x, y], csp.domains)
-            # column[y] = count
             if count < min_count:
+                column = {}
+                column[y] = count
+                asdf = [y]
                 min_count = count
                 min_column = y
-    return min_column, min_count
+            elif count <= min_count:
+                column[y] = count
+                asdf.append(y)
+    if len(asdf) > 1:
+        rand = randint(0, len(asdf)-1)
+        min_count = column[asdf[rand]]
+        min_column = asdf[rand]
+
+    return min_column
 
 
 

@@ -1,5 +1,5 @@
 import sys
-from functions import CSP, get_num_conflicts, min_conflicts
+from functions import CSP, get_num_conflicts, min_conflicts, create_board, print_board
 from random import randint
 
 n = int(sys.argv[1])
@@ -20,6 +20,12 @@ constraints = {key: get_num_conflicts(domains[key], domains) for key in variable
 print()
 csp = CSP(variables, domains, constraints)
 
-assignment = min_conflicts(csp, 1000)
+assignment = min_conflicts(csp, max_steps=1000)
+
+b = create_board(n)
+for key, value in assignment.domains.items():
+    b[value[1] - 1][value[0] - 1] = 'Q'
+print_board(b)
+
 if not assignment:
     print(assignment)
