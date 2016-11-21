@@ -89,12 +89,12 @@ def min_conflicts(csp, max_steps):
 
         # var = get_min_conflicts(conflicted, csp)
         value, count= conflicts(var, csp)
-        if past_var is not []:
+        if past_var != []:
             if len(past_var) >= 100: past_var.pop(0)
             while (var, value) in past_var:
                 var = conflicted[randint(0, len(conflicted)-1)]
                 value, count = conflicts(var, csp)
-        else: past_var.append((var, value))
+        past_var.append((var, value))
         csp.domains[var] = [int(var[1:]), value]
         # if count > 0:
         update_conflicts(csp)

@@ -22,8 +22,8 @@ print()
 if not assignment:
     print(assignment)
 else:
-    b = create_board(n)
-    for key, value in assignment.domains.items():
-        b[value[1] - 1][value[0] - 1] = 'Q'
-    print_board(b)
-    # pass
+    # b = create_board(n)
+    # for key, value in assignment.domains.items():
+    #     b[value[1] - 1][value[0] - 1] = 'Q'
+    # print_board(b)
+    pass
