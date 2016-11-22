@@ -59,7 +59,7 @@ def get_conflicts(queen, queens, conflict_list=None):
     return conflicts
 
 
-def min_conflicts(csp, max_steps):
+def min_conflicts(csp, n, max_steps):
     """
     ------------------------------------------------------
     Min-Conflicts algorithm for solving CSPs by
@@ -76,7 +76,8 @@ def min_conflicts(csp, max_steps):
     # current = initial complete assignment for csp
     # pass in csp as a complete inital assignment
     past_var = []
-
+    # q = n if n < 100 else 100 # arbitrary number to 100
+    # n = 100
     for i in range(1, max_steps+1):
         # print(csp.domains)
         # print(csp.constraints)
@@ -89,12 +90,16 @@ def min_conflicts(csp, max_steps):
 
         # var = get_min_conflicts(conflicted, csp)
         value, count= conflicts(var, csp)
+        loop = 0 # so it doesnt get stuck in an endless loop
         if past_var != []:
             if len(past_var) >= 100: past_var.pop(0)
-            while (var, value) in past_var:
+            while (var, value) in past_var and loop < 100:
                 var = conflicted[randint(0, len(conflicted)-1)]
                 value, count = conflicts(var, csp)
-        past_var.append((var, value))
+                loop += 1
+            # var = csp.variables[randint(0, n-1)]
+            # value, _ = conflicts(var, csp)
+        if loop < 100: past_var.append((var, value))
         csp.domains[var] = [int(var[1:]), value]
         # if count > 0:
         update_conflicts(csp)
@@ -116,6 +121,14 @@ def get_min_conflicts(conflicted, csp):
             least = x
     return least
 
+def get_least_conflicts_y(x, n, assignment):
+    conflict_list = []
+    for i in range(1, n+1):
+        count = get_num_conflicts([x, i], assignment)
+        conflict_list.append(count)
+    new_list = [i+1 for i, j in enumerate(conflict_list) if j == min(conflict_list)]
+
+    return new_list[randint(0, len(new_list) - 1)]
 
 def conflicts(var, csp):
     column, asdf = {}, []
