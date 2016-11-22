@@ -76,35 +76,24 @@ def min_conflicts(csp, n, max_steps):
     # current = initial complete assignment for csp
     # pass in csp as a complete inital assignment
     past_var = []
-    # q = n if n < 100 else 100 # arbitrary number to 100
-    # n = 100
     for i in range(1, max_steps+1):
-        # print(csp.domains)
-        # print(csp.constraints)
         conflicted = [i for i, j in csp.constraints.items() if len(j) != 0]
         if conflicted == []:
-            print(i)
+            print('Steps: {}'.format(i))
             return csp
-        # print(get_min_conflicts(conflicted, csp))
         var = conflicted[randint(0, len(conflicted)-1)]
 
-        # var = get_min_conflicts(conflicted, csp)
-        value, count= conflicts(var, csp)
+        value = conflicts(var, csp.domains[var], csp)
         loop = 0 # so it doesnt get stuck in an endless loop
         if past_var != []:
             if len(past_var) >= 100: past_var.pop(0)
             while (var, value) in past_var and loop < 100:
                 var = conflicted[randint(0, len(conflicted)-1)]
-                value, count = conflicts(var, csp)
+                value = conflicts(var, csp.domains[var], csp)
                 loop += 1
-            # var = csp.variables[randint(0, n-1)]
-            # value, _ = conflicts(var, csp)
         if loop < 100: past_var.append((var, value))
         csp.domains[var] = [int(var[1:]), value]
-        # if count > 0:
         update_conflicts(csp)
-        # else:
-        #     csp.constraints[var] = count
     return False
 
 
@@ -114,46 +103,39 @@ def update_conflicts(csp):
     return
 
 
-def get_min_conflicts(conflicted, csp):
-    least = conflicted[0]
-    for x in conflicted:
-        if len(csp.constraints[least]) > len(csp.constraints[x]):
-            least = x
-    return least
-
 def get_least_conflicts_y(x, n, assignment):
-    conflict_list = []
+    conflict_list, min_count = [], None
     for i in range(1, n+1):
         count = get_num_conflicts([x, i], assignment)
-        conflict_list.append(count)
-    new_list = [i+1 for i, j in enumerate(conflict_list) if j == min(conflict_list)]
+        if min_count is not None and min_count > count:
+            min_count = count
+            conflict_list = [i]
+        elif min_count is not None and min_count == count:
+            conflict_list.append(i)
+        elif min_count is None:
+            min_count = count
+            conflict_list = [i]
 
-    return new_list[randint(0, len(new_list) - 1)]
+    return conflict_list[randint(0, len(conflict_list) - 1)]
 
-def conflicts(var, csp):
-    column, asdf = {}, []
-    x = int(var[1:])
-    min_column = 1 if 1 != csp.domains[var][1] else 2
-    min_count = len(get_conflicts([x, min_column], csp.domains))
-    for y in range(1, len(csp.variables)+1):
-        if y != csp.domains[var][1]:
-            count = len(get_conflicts([x, y], csp.domains))
-            if count < min_count:
-                column = {}
-                column[y] = count
-                asdf = [y]
-                min_count = count
-                min_column = y
-            elif count <= min_count:
-                column[y] = count
-                asdf.append(y)
-    if len(asdf) > 1:
-        rand = randint(0, len(asdf)-1)
-        min_count = column[asdf[rand]]
-        min_column = asdf[rand]
 
-    # print(min_count)
-    return min_column, min_count
+def conflicts(var, v, csp):
+    x, y, n = v[0], v[1], len(csp.variables)
+    conflict_list, min_count = [], None
+
+    for i in range(1, n+1):
+        if i == y: continue
+        count = get_num_conflicts([x, i], csp.domains)
+        if min_count is not None and min_count > count:
+            min_count = count
+            conflict_list = [i]
+        elif min_count is not None and min_count == count:
+            conflict_list.append(i)
+        elif min_count is None:
+            min_count = count
+            conflict_list = [i]
+
+    return conflict_list[randint(0, len(conflict_list) - 1)]
 
 
 def create_board(n):

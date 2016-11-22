@@ -14,20 +14,27 @@ for i in range(1, n+1):
 
 constraints = {key: get_conflicts(domains[key], domains) for key in variables}
 
-# print()
 csp = CSP(variables, domains, constraints)
 
-assignment = min_conflicts(csp, n, max_steps=1000)
-end_time = time.time()
+# UNCOMMENT TO SEE BOARD
+# print('Initial')
+# b = create_board(n)
+# for key, value in csp.domains.items():
+#     b[value[1] - 1][value[0] - 1] = 'Q'
+# print_board(b)
+# print()
 
-print(end_time - start_time)
-print()
+assignment = min_conflicts(csp, n, max_steps=100)
 
-if not assignment:
-    print(assignment)
-else:
-    # b = create_board(n)
-    # for key, value in assignment.domains.items():
-    #     b[value[1] - 1][value[0] - 1] = 'Q'
-    # print_board(b)
-    pass
+if assignment: print('Time: {:0.5f} secs'.format(time.time() - start_time))
+
+# UNCOMMENT TO SEE BOARD
+# if not assignment:
+#     print(assignment)
+# else:
+#     print()
+#     print('Complete')
+#     b = create_board(n)
+#     for key, value in assignment.domains.items():
+#         b[value[1] - 1][value[0] - 1] = 'Q'
+#     print_board(b)
