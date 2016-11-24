@@ -1,8 +1,13 @@
 import sys, time
+from argparse import ArgumentParser
 from functions import CSP, get_conflicts, min_conflicts, create_board, print_board, get_least_conflicts_y
 from random import randint
 
-n = int(sys.argv[1])
+parser = ArgumentParser(description="A N-Queens Solver")
+parser.add_argument('n', type=int, help="The number of queens")
+args = parser.parse_args()
+
+n = args.n
 
 start_time = time.time()
 
