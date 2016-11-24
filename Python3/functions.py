@@ -83,13 +83,13 @@ def min_conflicts(csp, n, max_steps):
             return csp
         var = conflicted[randint(0, len(conflicted)-1)]
 
-        value = conflicts(var, csp.domains[var], csp)
+        value = conflicts(var, csp.domains[var], n, csp)
         loop = 0 # so it doesnt get stuck in an endless loop
         if past_var != []:
             if len(past_var) >= 100: past_var.pop(0)
             while (var, value) in past_var and loop < 100:
                 var = conflicted[randint(0, len(conflicted)-1)]
-                value = conflicts(var, csp.domains[var], csp)
+                value = conflicts(var, csp.domains[var], n, csp)
                 loop += 1
         if loop < 100: past_var.append((var, value))
         csp.domains[var] = [int(var[1:]), value]
@@ -104,23 +104,20 @@ def update_conflicts(csp):
 
 
 def get_least_conflicts_y(x, n, assignment):
-    conflict_list, min_count = [], None
-    for i in range(1, n+1):
+    conflict_list, min_count = [1], get_num_conflicts([x, 1], assignment)
+    for i in range(2, n+1):
         count = get_num_conflicts([x, i], assignment)
-        if min_count is not None and min_count > count:
+        if min_count > count:
             min_count = count
             conflict_list = [i]
-        elif min_count is not None and min_count == count:
+        elif min_count == count:
             conflict_list.append(i)
-        elif min_count is None:
-            min_count = count
-            conflict_list = [i]
 
     return conflict_list[randint(0, len(conflict_list) - 1)]
 
 
-def conflicts(var, v, csp):
-    x, y, n = v[0], v[1], len(csp.variables)
+def conflicts(var, v, n, csp):
+    x, y = v[0], v[1]
     conflict_list, min_count = [], None
 
     for i in range(1, n+1):
