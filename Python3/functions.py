@@ -30,9 +30,10 @@ def get_num_conflicts(queen, queens):
     """
     x, y, count = queen[0], queen[1], 0
 
-    for _, value in queens.items():
+    for key, value in queens.items():
         # get the x and y value of the queen
-        x1, y1 = value[0], value[1]
+        y1 = value
+        x1 = int(key[1:])
         # if it's not the same queen and if the value (queen) is in a position of conflict
         # it checks the y value, positive slope, and negatvie slope
         if (queen != value) and ((y == y1) or (y1 == pos(x, y, x1) or
@@ -61,15 +62,15 @@ def get_conflicts(queen, queens, conflict_list=None):
         for key, value in queens.items():
             # check if the queens aren't the same and if its in a position of conflict
             # add it to the list of conflicted queens
-            x1, y1 = value[0], value[1]
-            if (queen != value) and ((y == y1) or (y1 == pos(x, y, x1) or
-                (y1 == neg(x, y, x1)))):
+            x1, y1 = int(key[1:]), value
+            if (queen != [x1, y1]) and ((y == y1) or (y1 == pos(x, y, x1)
+                or (y1 == neg(x, y, x1)))):
                 conflicts.append(key)
     else:
         # this just reduced the search space and does the same thing as above
         for key in conflict_list:
             value = queens[key]
-            x1, y1 = value[0], value[1]
+            x1, y1 = int(key[1:]), value
             if (queen != value) and ((y == y1) or (y1 == pos(x, y, x1) or
                 (y1 == neg(x, y, x1)))):
                 conflicts.append(key)
@@ -104,7 +105,7 @@ def min_conflicts(csp, n, max_steps):
             return csp
         # get a random queen from the conflicted list
         var = conflicted[randint(0, len(conflicted)-1)]
-
+        
         # get a value (cell) for that queen
         value = conflicts(var, csp.domains[var], n, csp)
         loop = 0 # so it doesnt get stuck in an endless loop
@@ -122,7 +123,7 @@ def min_conflicts(csp, n, max_steps):
                 loop += 1
         # add move to the tabu list
         if loop < 100: past_var.append((var, value))
-        csp.domains[var] = [int(var[1:]), value]
+        csp.domains[var] = value
         update_conflicts(csp)
     return False
 
@@ -130,7 +131,7 @@ def min_conflicts(csp, n, max_steps):
 def update_conflicts(csp):
     # update the conflicts for the entire board
     for i in csp.variables:
-        csp.constraints[i] = get_conflicts(csp.domains[i], csp.domains, csp.constraints[i])
+        csp.constraints[i] = get_conflicts([int(i[1:]), csp.domains[i]], csp.domains, csp.constraints[i])
     return
 
 
@@ -149,13 +150,19 @@ def get_least_conflicts_y(x, n, assignment):
             conflict_list = [i]
         elif min_count == count:
             conflict_list.append(i)
-
+            
     return conflict_list[randint(0, len(conflict_list) - 1)]
 
-
+def get_empty_spot(x,n,domains):
+    for i in range(1, n+1):
+        for _, v in domains.items():
+            if i not in v:
+                return i
+    return get_least_conflicts_y(x,n,domains)
+    
 # basically the same as the function above
 def conflicts(var, v, n, csp):
-    x, y = v[0], v[1]
+    x, y = int(var[1:]), v
     conflict_list, min_count = [], None
 
     for i in range(1, n+1):
