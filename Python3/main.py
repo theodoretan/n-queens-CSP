@@ -25,7 +25,7 @@ csp = CSP(variables, domains, constraints)
 # print('Initial')
 # b = create_board(n)
 # for key, value in csp.domains.items():
-#     b[value[1] - 1][value[0] - 1] = 'Q'
+#     b[value[1] - 1][int(key[1:]) - 1] = 'Q'
 # print_board(b)
 # print()
 
@@ -41,5 +41,5 @@ if assignment: print('Time: {:0.5f} secs'.format(time.time() - start_time))
 #     print('Complete')
 #     b = create_board(n)
 #     for key, value in assignment.domains.items():
-#         b[value[1] - 1][value[0] - 1] = 'Q'
+#         b[value[1] - 1][int(key[1:]) - 1] = 'Q'
 #     print_board(b)
