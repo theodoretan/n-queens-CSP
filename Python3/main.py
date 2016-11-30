@@ -11,21 +11,22 @@ n = args.n
 
 start_time = time.time()
 
-variables = ['Q{}'.format(i) for i in range(1, n+1)]
+variables = [i for i in range(1, n+1)]
 # domains = {key : [int(key[1:]), randint(1, n)] for key in variables}
 domains = {}
 for i in range(1, n+1):
-    domains['Q{}'.format(i)] = [i, get_least_conflicts_y(i, n, domains)]
+    domains[i] = get_least_conflicts_y(i, n, domains)
 
-constraints = {key: get_conflicts(domains[key], domains) for key in variables}
+constraints = {key: get_conflicts([key, domains[key]], domains) for key in variables}
 
 csp = CSP(variables, domains, constraints)
 
+print('Set-up Time: {:0.5f} secs'.format(time.time() - start_time))
 # UNCOMMENT TO SEE BOARD
 # print('Initial')
 # b = create_board(n)
 # for key, value in csp.domains.items():
-#     b[value[1] - 1][int(key[1:]) - 1] = 'Q'
+#     b[value - 1][key - 1] = 'Q'
 # print_board(b)
 # print()
 
@@ -41,5 +42,5 @@ if assignment: print('Time: {:0.5f} secs'.format(time.time() - start_time))
 #     print('Complete')
 #     b = create_board(n)
 #     for key, value in assignment.domains.items():
-#         b[value[1] - 1][int(key[1:]) - 1] = 'Q'
+#         b[value - 1][key - 1] = 'Q'
 #     print_board(b)

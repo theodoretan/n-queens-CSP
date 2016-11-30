@@ -10,6 +10,11 @@ There is also a Greedy Search Algorithm that palces the queens on the board to i
 I also removed the Java folder since we have decided to focus on optimizing/improving the python version of the code for now. We can re-try to do the code in Java once we finish with the Python code.
 
 
+Update 3 [Theodore][Theodore]:
+- Changed variables: [Q1,Q2,...,QN] -> [1,2,...,N]
+- Changed domains: {Q1:[1,#],...,QN:[N,#]} -> {1:#,...,N:#}
+
+
 <!-- links -->
 [Razi]:     https://github.com/RaziAbbasi
 [Theodore]: https://github.com/th30retical
