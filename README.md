@@ -16,7 +16,7 @@ Update 3 [Theodore][Theodore]:
 
 Update 4:
 - Use [pypy3][PyPy] to run the program instead of python3 because it improves the runtime of the program
-- ```$ pypy3.3 main.py 1000``` instead of ```python3 main.py 1000```
+- ```$ pypy3.3 main.py 1000``` instead of ```$ python3 main.py 1000```
 
 
 <!-- links -->

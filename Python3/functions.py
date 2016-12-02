@@ -1,4 +1,4 @@
-from random import randint
+from random import choice, randint
 
 class CSP():
     """
@@ -93,7 +93,8 @@ def min_conflicts(csp, n, max_steps):
     """
     # current = initial complete assignment for csp
     # pass in csp as a complete inital assignment
-    past_var = [] # TABU SEARCH LIST
+    past_var = {} # TABU SEARCH LIST
+    x = 100 if n >= 200 else (n/2)
     for i in range(1, max_steps+1):
         # get the list of conflcited queens from the csp constraints
         # NOTE: constraints is the list of conflicted queens
@@ -103,25 +104,17 @@ def min_conflicts(csp, n, max_steps):
             print('Steps: {}'.format(i))
             return csp
         # get a random queen from the conflicted list
-        var = conflicted[randint(0, len(conflicted)-1)]
+        var = choice(conflicted)
+        if var in past_var:
+            if csp.domains[var] not in past_var[var]:
+                past_var[var].append(csp.domains[var])
+        else:
+            past_var[var] = [csp.domains[var]]
 
-        # get a value (cell) for that queen
-        value = conflicts(var, csp.domains[var], n, csp)
-        loop = 0 # so it doesnt get stuck in an endless loop
+        value = conflicts(var, csp.domains[var], n, csp, past_var[var])
 
-        if past_var != []:
-            # only keep 100 moves in the tabu list
-            if len(past_var) >= 100: past_var.pop(0)
+        if len(past_var[var]) >= x: past_var[var].pop(0)
 
-            # loop while the random (queen, value) pair is in the list
-            # and we're under 100 iterations
-            while (var, value) in past_var and loop < 100:
-                # get another random queen and value
-                var = conflicted[randint(0, len(conflicted)-1)]
-                value = conflicts(var, csp.domains[var], n, csp)
-                loop += 1
-        # add move to the tabu list
-        if loop < 100: past_var.append((var, value))
         csp.domains[var] = value
         update_conflicts(csp)
     return False
@@ -130,18 +123,22 @@ def min_conflicts(csp, n, max_steps):
 def update_conflicts(csp):
     # update the conflicts for the entire board
     for i in csp.variables:
-        csp.constraints[i] = get_conflicts([i, csp.domains[i]], csp.domains, csp.constraints[i])
+        csp.constraints[i] = get_conflicts([i, csp.domains[i]], csp.domains)#, csp.constraints[i])
     return
 
 
 # NOTE: this is to initialize the board
-def get_least_conflicts_y(x, n, assignment):
+def get_least_conflicts_y(x, n, assignment, possible):
     # conflict_list is the list of min_conflict y-values
     # min_count is the current lowest cell conflict number
-    conflict_list, min_count = [1], get_num_conflicts([x, 1], assignment)
+    if x == 1:
+        return choice(possible)
+
+    conflict_list, min_count = [possible[0]], get_num_conflicts([x, possible[0]], assignment)
 
     # for the rest of the board
-    for i in range(2, n+1):
+    # for i in range(2, n+1):
+    for i in possible[1:]:
         count = get_num_conflicts([x, i], assignment)
         # update the min_count and list
         if min_count > count:
@@ -150,11 +147,11 @@ def get_least_conflicts_y(x, n, assignment):
         elif min_count == count:
             conflict_list.append(i)
 
-    return conflict_list[randint(0, len(conflict_list) - 1)]
-
+    # return conflict_list[randint(0, len(conflict_list) - 1)]
+    return choice(conflict_list)
 
 # basically the same as the function above
-def conflicts(var, v, n, csp):
+def conflicts(var, v, n, csp, not_possible):
     x, y = var, v
     conflict_list, min_count = [], None
 
@@ -170,7 +167,12 @@ def conflicts(var, v, n, csp):
             min_count = count
             conflict_list = [i]
 
-    return conflict_list[randint(0, len(conflict_list) - 1)]
+    clist = list(set(conflict_list) - set(not_possible))
+    if clist != []:
+        return choice(clist)
+
+    # return conflict_list[randint(0, len(conflict_list) - 1)]
+    return choice(conflict_list)
 
 
 # functions to create and print the board
