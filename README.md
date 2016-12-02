@@ -14,7 +14,12 @@ Update 3 [Theodore][Theodore]:
 - Changed variables: [Q1,Q2,...,QN] -> [1,2,...,N]
 - Changed domains: {Q1:[1,#],...,QN:[N,#]} -> {1:#,...,N:#}
 
+Update 4:
+- Use [pypy3][PyPy] to run the program instead of python3 because it improves the runtime of the program
+- ```$ pypy3.3 main.py 1000``` instead of ```python3 main.py 1000```
+
 
 <!-- links -->
 [Razi]:     https://github.com/RaziAbbasi
 [Theodore]: https://github.com/th30retical
+[PyPy]:     http://pypy.org/
