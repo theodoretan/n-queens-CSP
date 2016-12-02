@@ -94,7 +94,7 @@ def min_conflicts(csp, n, max_steps):
     # current = initial complete assignment for csp
     # pass in csp as a complete inital assignment
     past_var = {} # TABU SEARCH LIST
-    x = 100 if n >= 200 else (n/2)
+    x = 50 if n >= 100 else (n//2)
     for i in range(1, max_steps+1):
         # get the list of conflcited queens from the csp constraints
         # NOTE: constraints is the list of conflicted queens
