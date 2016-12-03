@@ -94,6 +94,7 @@ def min_conflicts(csp, n, max_steps):
     # current = initial complete assignment for csp
     # pass in csp as a complete inital assignment
     past_var = {} # TABU SEARCH LIST
+    past_queen = None
     x = 50 if n >= 100 else (n//2)
     for i in range(1, max_steps+1):
         # get the list of conflcited queens from the csp constraints
@@ -105,6 +106,10 @@ def min_conflicts(csp, n, max_steps):
             return csp
         # get a random queen from the conflicted list
         var = choice(conflicted)
+        if past_queen is not None and var == past_queen:
+            conflicted.remove(var)
+            var = choice(conflicted)
+        past_queen = var
         if var in past_var:
             if csp.domains[var] not in past_var[var]:
                 past_var[var].append(csp.domains[var])
@@ -131,8 +136,6 @@ def update_conflicts(csp):
 def get_least_conflicts_y(x, n, assignment, possible):
     # conflict_list is the list of min_conflict y-values
     # min_count is the current lowest cell conflict number
-    if x == 1:
-        return choice(possible)
 
     conflict_list, min_count = [possible[0]], get_num_conflicts([x, possible[0]], assignment)
 

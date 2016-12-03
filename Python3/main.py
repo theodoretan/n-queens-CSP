@@ -15,9 +15,12 @@ start_time = time.time()
 variables = [i for i in range(1, n+1)]
 _var = deepcopy(variables)
 # domains = {key : [int(key[1:]), randint(1, n)] for key in variables}
-domains = {}
-for i in range(1, n+1):
-    if i % (n//4) != 0:
+y = choice(_var)
+domains = {1: y}
+_var.remove(y)
+
+for i in range(2, n+1):
+    if i % (n/4) != 0:
         y = get_least_conflicts_y(i, n, domains, _var)
     else:
         y = choice(_var)
