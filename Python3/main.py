@@ -8,6 +8,7 @@ from random import choice
 
 parser = ArgumentParser(description="A N-Queens Solver")
 parser.add_argument('n', type=int, help="The number of queens")
+parser.add_argument('-v', action='store_true', dest='verbose')
 args = parser.parse_args()
 
 n = args.n
@@ -47,7 +48,7 @@ assignment = min_conflicts(csp, n, board) #, max_steps=500)
 if assignment: print('Time: {:0.5f} secs'.format(time.time() - start_time))
 else: print('Increase Max Steps to solve.')
 # UNCOMMENT TO SEE BOARD
-if (n <= 15):
+if (n <= 15 or args.verbose):
     if not assignment:
         print(assignment)
     else:
