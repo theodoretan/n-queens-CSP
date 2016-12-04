@@ -18,6 +18,9 @@ Update 4:
 - Use [pypy3][PyPy] to run the program instead of python3 because it improves the runtime of the program
 - ```$ pypy3.3 main.py 1000``` instead of ```$ python3 main.py 1000```
 
+Update 5:
+- added ```setup.sh``` file to setup environment easily
+
 
 <!-- links -->
 [Razi]:     https://github.com/RaziAbbasi
