@@ -48,12 +48,17 @@ assignment = min_conflicts(csp, n, max_steps=200)
 if assignment: print('Time: {:0.5f} secs'.format(time.time() - start_time))
 
 # UNCOMMENT TO SEE BOARD
-# if not assignment:
-#     print(assignment)
-# else:
-#     print()
-#     print('Complete')
-#     b = create_board(n)
-#     for key, value in assignment.domains.items():
-#         b[value - 1][key - 1] = 'Q'
-#     print_board(b)
+if (n <= 15):
+    if not assignment:
+        print(assignment)
+    else:
+        print()
+        print('Complete')
+        b = create_board(n)
+        for key, value in assignment.domains.items():
+            b[value - 1][key - 1] = 'Q'
+        print_board(b)
+else:
+    f = open("output.txt", 'w')
+    print(csp.domains, file=f)
+    f.close()
