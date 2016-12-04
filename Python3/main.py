@@ -53,7 +53,7 @@ if assignment:
         b = create_board(n)
         for key, value in assignment.domains.items():
             b[value - 1][key - 1] = 'Q'
-            print_board(b)
+        print_board(b)
     else:
         f = open("output.txt", 'w')
         print(csp.domains, file=f)
