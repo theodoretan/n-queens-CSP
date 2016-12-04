@@ -1,8 +1,10 @@
 import sys, time
+
 from argparse import ArgumentParser
 from copy import deepcopy
-from functions import CSP, get_conflicts, min_conflicts, create_board, print_board, get_least_conflicts_y
-from random import choice, randint
+from functions import Board, CSP
+from functions import create_board, get_least_conflicts_y, min_conflicts, print_board
+from random import choice
 
 parser = ArgumentParser(description="A N-Queens Solver")
 parser.add_argument('n', type=int, help="The number of queens")
@@ -12,22 +14,21 @@ n = args.n
 
 start_time = time.time()
 
+board = Board(n)
 variables = [i for i in range(1, n+1)]
 _var = deepcopy(variables)
-# domains = {key : [int(key[1:]), randint(1, n)] for key in variables}
-domains = {}
-for i in range(1, n+1):
-    if i % (n//4) != 0:
-        y = get_least_conflicts_y(i, n, domains, _var)
-    else:
-        y = choice(_var)
+constraints = {i: 0 for i in variables}
+
+y = choice(_var)
+domains = {1: y}
+_var.remove(y)
+board.set_queen(1, y, constraints)
+
+for i in range(2, n+1):
+    y = get_least_conflicts_y(i, n, domains, _var, board)
     domains[i] = y
+    board.set_queen(i, y, constraints)
     _var.remove(y)
-
-constraints = {key: get_conflicts([key, domains[key]], domains) for key in variables}
-
-# print([i for i, j in constraints.items() if len(j) != 0])
-# input()
 
 csp = CSP(variables, domains, constraints)
 
@@ -40,10 +41,11 @@ print('Set-up Time: {:0.5f} secs'.format(time.time() - start_time))
 # print_board(b)
 # print()
 
-assignment = min_conflicts(csp, n, max_steps=200)
+# max_steps defaults at 100
+assignment = min_conflicts(csp, n, board) #, max_steps=500)
 
 if assignment: print('Time: {:0.5f} secs'.format(time.time() - start_time))
-
+else: print('Increase Max Steps to solve.')
 # UNCOMMENT TO SEE BOARD
 # if not assignment:
 #     print(assignment)
