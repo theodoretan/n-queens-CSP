@@ -45,20 +45,19 @@ print('Set-up Time: {:0.5f} secs'.format(time.time() - start_time))
 # max_steps defaults at 100
 assignment = min_conflicts(csp, n, board) #, max_steps=500)
 
-if assignment: print('Time: {:0.5f} secs'.format(time.time() - start_time))
-else: print('Increase Max Steps to solve.')
-# UNCOMMENT TO SEE BOARD
-if (n <= 15 or args.verbose):
-    if not assignment:
-        print(assignment)
-    else:
+if assignment:
+    print('Time: {:0.5f} secs'.format(time.time() - start_time))
+    if (n <= 15 or args.verbose):
         print()
         print('Complete')
         b = create_board(n)
         for key, value in assignment.domains.items():
             b[value - 1][key - 1] = 'Q'
-        print_board(b)
+            print_board(b)
+    else:
+        f = open("output.txt", 'w')
+        print(csp.domains, file=f)
+        f.close()
+
 else:
-    f = open("output.txt", 'w')
-    print(csp.domains, file=f)
-    f.close()
+    print('Increase Max Steps to solve.')
