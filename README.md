@@ -2,11 +2,18 @@
 
 ## Setup
 ```$ sudo ./setup.sh``` will download and setup pypy3 if you dont already have it on your system.
+
 ```$ pypy3.3 Python3/main.py N [-v]``` to run the program
+
 - N: the number of queens on the board
 - -v: print out the board to the console if N is a large number
+
 ex. ```$ pypy3.3 Python3/main.py 10000 -v```
+
+
 ---
+
+
 Update 1 [Razi][Razi]: I did most of the program in Java. But it doesn't actually spit out the right answer.
 The program properly calculated the number of conflicts in each row of its column.
 But when it's current position's conflicts are the same as the other position's conflicts it stays the same.And doesn't switch.
