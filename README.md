@@ -1,20 +1,26 @@
 # N-Queens CSP
 
 ## Setup and Running
+To download and setup pypy3 if you dont already have it on your system:
 ```
 $ sudo ./setup.sh
 ```
-will download and setup pypy3 if you dont already have it on your system.
 
+To run the program:
 ```
-$ pypy3.3 Python3/main.py N [-v]
+$ pypy3.3 Python3/main.py N [-v] [-a]
 ```
-to run the program
 
 - N: the number of queens on the board
-- -v: print out the board to the console if N is a large number
+- -v: print out the solved board to the console if N is a large number
+- -a: print out the inital and solved board to the console
 
-ex. ```$ pypy3.3 Python3/main.py 10000 -v```
+Examples:
+```
+$ pypy3.3 Python3/main.py 1000
+$ pypy3.3 Python3/main.py 100 -v
+$ pypy3.3 Python3/main.py 10000 -a
+```
 
 ---
 
