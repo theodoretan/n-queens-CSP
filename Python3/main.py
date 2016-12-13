@@ -2,7 +2,7 @@ import sys, time
 
 from argparse import ArgumentParser
 from copy import deepcopy
-from functions import Board, CSP
+from functions import Board, Colours, CSP
 from functions import create_board, get_least_conflicts_y, min_conflicts, print_board
 from random import choice
 
@@ -52,7 +52,10 @@ if (n <= 15 or args.initial_board):
     print('Initial Board')
     b = create_board(n)
     for key, value in csp.domains.items():
-        b[value - 1][key - 1] = 'Q'
+        if constraints[key] > 0:
+            b[value-1][key -1] = Colours.FAIL + 'Q' + Colours.ENDC
+        else:
+            b[value - 1][key - 1] = Colours.OKGREEN + 'Q' + Colours.ENDC
     print_board(b)
     print()
 
@@ -76,7 +79,7 @@ if assignment:
         print('Solved Board')
         b = create_board(n)
         for key, value in assignment.domains.items():
-            b[value - 1][key - 1] = 'Q'
+            b[value - 1][key - 1] = Colours.OKGREEN + 'Q' + Colours.ENDC
         print_board(b)
     else:
         # or print to an output.txt file if we're computing larger numbers

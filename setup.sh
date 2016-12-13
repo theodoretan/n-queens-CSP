@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # setup pypy3
-if ! hash pypy3.3 2>/dev/null; then
-  echo 'Need to install pypy3.3.'
+if uname=="Linux" && ! hash pypy3.3 2>/dev/null; then
+  echo 'Need to install pypy3.3'
   # download pypy
   wget "https://bitbucket.org/pypy/pypy/downloads/pypy3.3-v5.5.0-alpha-linux64.tar.bz2"
   # extract the folder
@@ -13,6 +13,14 @@ if ! hash pypy3.3 2>/dev/null; then
   mv pypy3.3-v5.5.0-linux64/ /opt
   # create the link so we can use 'pypy3.3' instead of writing the full path
   ln -s "/opt/pypy3.3-v5.5.0-linux64/bin/pypy3.3" "/usr/local/bin/"
+
+  echo 'Installed pypy3.3'
+elif uname=="Darwin" && ! hash pypy3 2>/dev/null; then
+  echo 'Need to install pypy3'
+
+  brew install pypy3
+
+  echo 'Installed pypy3'
 else
   echo 'PyPy3.3 already installed on system.'
 fi

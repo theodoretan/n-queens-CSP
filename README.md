@@ -1,12 +1,12 @@
 # N-Queens CSP
 
 ## Setup and Running
-To download and setup pypy3 if you dont already have it on your system:
+To download and setup pypy3 if you dont already have it on your system (Linux and Mac):
 ```
 $ sudo ./setup.sh
 ```
 
-To run the program:
+To run the program (Linux):
 ```
 $ pypy3.3 Python3/main.py N [-v] [-a]
 ```
@@ -20,6 +20,11 @@ Examples:
 $ pypy3.3 Python3/main.py 1000
 $ pypy3.3 Python3/main.py 100 -v
 $ pypy3.3 Python3/main.py 10000 -a
+```
+
+To run the program (Mac):
+```
+$ pypy3 Python3/main.py N [-v] [-a]
 ```
 
 ---
@@ -45,6 +50,11 @@ Update 4:
 
 Update 5:
 - added ```setup.sh``` file to setup environment easily
+
+Update 6:
+- added the board object
+- colour for the queens on the output
+- comments and updated the setup.sh file
 
 
 <!-- links -->

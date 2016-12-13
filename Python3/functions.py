@@ -1,7 +1,7 @@
 from random import choice
 
 # CLASSES #
-class Board():
+class Board:
     """
     ------------------------------------------------------
     A Board object that keeps track of the conflicting
@@ -89,7 +89,7 @@ class Board():
         return len(combined)
 
 
-class CSP():
+class CSP:
     """
     ------------------------------------------------------
     A CSP object that holds the variables, domains and
@@ -100,6 +100,22 @@ class CSP():
         self.variables = variables
         self.domains = domains
         self.constraints = constraints
+
+
+class Colours:
+    """
+    ------------------------------------------------------
+    Colours for the terminal printing.
+    ------------------------------------------------------
+    """
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
 
 
 # FUNCTIONS #
